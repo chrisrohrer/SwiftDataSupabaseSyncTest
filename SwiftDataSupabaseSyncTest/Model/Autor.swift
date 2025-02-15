@@ -64,6 +64,7 @@ struct AutorRemote: Codable {
         )
     }
     
+    @MainActor
     func createOrUpdateAutor(modelContext: ModelContext) {
         
         let existingAutor = try? modelContext.fetch(FetchDescriptor<Autor>(predicate: #Predicate { $0.id == self.id })).first

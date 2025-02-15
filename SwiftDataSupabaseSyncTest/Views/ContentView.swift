@@ -23,17 +23,6 @@ struct ContentView: View {
                 .tabItem { Label("Bücher", systemImage: "book") }
         }
 
-        .task {
-            do {
-                try await SupabaseSyncManager.shared.fetchRemoteChanges(modelContext: modelContext)
-                try await SupabaseSyncManager.shared.uploadLocalChanges(modelContext: modelContext)
-                SupabaseSyncManager.shared.startRealtimeSync(modelContext: modelContext)
-                SwiftDataSyncManager.shared.setModelContext(modelContext)
-
-            } catch {
-                print("Error syncing on app launch: \(error)")
-            }
-        }
         
 //        .onReceive(NotificationCenter.default.publisher(for: ModelContext.didSave)) { notification in
 //            if let userInfo = notification.userInfo {
@@ -80,13 +69,13 @@ struct ContentView: View {
 
 }
 
-
-func fetchRecordByID<T: PersistentModel>(id: PersistentIdentifier, context: ModelContext) -> T? {
-    return context.model(for: id) as? T
-}
-
-
-
+//
+//func fetchRecordByID<T: PersistentModel>(id: PersistentIdentifier, context: ModelContext) -> T? {
+//    return context.model(for: id) as? T
+//}
+//
+//
+//
 #Preview {
     ContentView()
         .modelContainer(MyPreviews.shared.container)

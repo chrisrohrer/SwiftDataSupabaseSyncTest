@@ -14,7 +14,8 @@ final class SupabaseSyncManager {
     static let shared = SupabaseSyncManager()
     
     var isSyncing = false
-    
+    var isUploading = false // 🚀 NEW FLAG
+
     // darf nur einer sein für alle Changes!
     private var subscriptionChannel: RealtimeChannelV2?
     
@@ -27,6 +28,9 @@ final class SupabaseSyncManager {
     @MainActor
     func uploadLocalChanges(modelContext: ModelContext) async throws {
         
+        if isUploading { return }
+        isUploading = true
+
         try modelContext.save()
         
         let unsyncedAutoren = try modelContext.fetch(FetchDescriptor<Autor>(predicate: #Predicate { $0.isSynced == false }))
@@ -43,20 +47,32 @@ final class SupabaseSyncManager {
             
             print("--- upload Autoren")
             
-            _ = try await supabase
+            let response = try await supabase
                 .from("Autor")
                 .upsert(remoteAutoren)
                 .execute()
+            
+            if response.status == 201 || response.status == 200 { // Only mark as synced if successful
+                for autor in unsyncedAutoren { autor.isSynced = true }
+            } else {
+                print("Failed to upload Autoren: \(response)")
+            }
         }
         
         if !remoteBuecher.isEmpty {
             
             print("--- upload Bücher")
             
-            _ = try await supabase
+            let response = try await supabase
                 .from("Buch")
                 .upsert(remoteBuecher)
                 .execute()
+            
+            if response.status == 201 || response.status == 200 {
+                for buch in unsyncedBuecher { buch.isSynced = true }
+            } else {
+                print("Failed to upload Bücher: \(response)")
+            }
         }
                 
         for autor in unsyncedAutoren { autor.isSynced = true }
@@ -65,6 +81,7 @@ final class SupabaseSyncManager {
         try modelContext.save()
         
         isSyncing = false
+        isUploading = false // 🚀 Reset the flag
     }
     
     
@@ -78,7 +95,6 @@ final class SupabaseSyncManager {
         print("<<< SupabaseSyncManager: fetchRemoteChanges")
         
         let lastSyncDate = UserDefaults.standard.object(forKey: "lastSyncDate") as? Date ?? Date.distantPast
-        let lastSyncISO = ISO8601DateFormatter().string(from: lastSyncDate)
         
         // Fetch Autoren
         let autorResponse: [AutorRemote] = try await supabase

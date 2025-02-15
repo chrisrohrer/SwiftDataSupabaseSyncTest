@@ -33,7 +33,20 @@ final class SwiftDataSyncManager {
                     print(">>> SwiftDataSyncManager: Supabase is syncing ... Not reacting to changes")
                     return
                 }
+                
                 self?.handleModelChangesWillSave()
+                
+                // ✅ Call upload after marking as unsynced
+                Task {
+                    do {
+                        if let modelContext = self?.modelContext {
+                            try await SupabaseSyncManager.shared.uploadLocalChanges(modelContext: modelContext)
+                        }
+                    } catch {
+                        print("❌ Error uploading local changes: \(error)")
+                    }
+                }
+
             }
             .store(in: &cancellables)
     }
@@ -46,6 +59,11 @@ final class SwiftDataSyncManager {
             return
         }
         
+        if SupabaseSyncManager.shared.isSyncing {
+            print(">>> SwiftDataSyncManager: Supabase is syncing ... Not reacting to changes")
+            return
+        }
+
         let inserted = modelContext.insertedModelsArray
         let updated = modelContext.changedModelsArray
         let deleted = modelContext.deletedModelsArray
@@ -56,15 +74,19 @@ final class SwiftDataSyncManager {
                 let model = modelContext.model(for: item.persistentModelID)
 
                 if let book = model as? Buch {
-                    print(book.id, book.titel)
-                    book.updatedAt = .now
-                    book.isSynced = false
+                    if book.isSynced {
+                        print(book.id, book.titel)
+                        book.updatedAt = .now
+                        book.isSynced = false
+                    }
                 }
-
+                
                 if let author = model as? Autor {
-                    print(author.id, author.name)
-                    author.updatedAt = .now
-                    author.isSynced = false
+                    if author.isSynced {
+                        print(author.id, author.name)
+                        author.updatedAt = .now
+                        author.isSynced = false
+                    }
                 }
             }
         }
@@ -75,15 +97,19 @@ final class SwiftDataSyncManager {
 
                 let model = modelContext.model(for: item.persistentModelID)
                 if let book = model as? Buch {
-                    print(book.id, book.titel)
-                    book.updatedAt = .now
-                    book.isSynced = false
+                    if book.isSynced {
+                        print(book.id, book.titel)
+                        book.updatedAt = .now
+                        book.isSynced = false
+                    }
                 }
-
+                
                 if let author = model as? Autor {
-                    print(author.id, author.name)
-                    author.updatedAt = .now
-                    author.isSynced = false
+                    if author.isSynced {
+                        print(author.id, author.name)
+                        author.updatedAt = .now
+                        author.isSynced = false
+                    }
                 }
             }
         }

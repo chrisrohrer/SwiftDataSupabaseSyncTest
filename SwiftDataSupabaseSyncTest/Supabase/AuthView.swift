@@ -15,43 +15,49 @@ struct AuthView: View {
 //    @State private var result: Result<Void, Error>?
 
     @EnvironmentObject var authVM: AuthVM
-    
+    @Environment(\.modelContext) private var modelContext
+
     var body: some View {
         
-        if authVM.isAuthenticated  {
-            ContentView()
-
-        } else if authVM.isLoading {
-            ProgressView()
-        } else {
-            Form {
-                Section {
-                    TextField("Email", text: $email)
-                        .textContentType(.emailAddress)
-                        .autocorrectionDisabled()
-                    SecureField("Password", text: $password)
-                        .textContentType(.password)
-                        .autocorrectionDisabled()
+        Group {
+            if authVM.isAuthenticated  {
+                ContentView()
+            } else if authVM.isLoading {
+                ProgressView()
+            } else {
+                Form {
+                    Section {
+                        TextField("Email", text: $email)
+                            .textContentType(.emailAddress)
+                            .autocorrectionDisabled()
+                        SecureField("Password", text: $password)
+                            .textContentType(.password)
+                            .autocorrectionDisabled()
+                    }
+                    
+                    Section {
+                        Button("Sign in") {
+                            isLoading = true
+                            defer { isLoading = false }
+                            authVM.signIn(email: email, password: password)
+                        }
+                        if isLoading {
+                            ProgressView()
+                        }
+                    }
                 }
+                .frame(width: 400)
                 
-                Section {
-                    Button("Sign in") {
-                        isLoading = true
-                        defer { isLoading = false }
-                        authVM.signIn(email: email, password: password)
-                    }
-                    if isLoading {
-                        ProgressView()
-                    }
-                }
+                .onOpenURL(perform: { url in
+                    print("onOpenURL", url)
+                    supabase.auth.handle(url)
+                })
+                
             }
-            .frame(width: 400)
-
-            .onOpenURL(perform: { url in
-                print("onOpenURL", url)
-                supabase.auth.handle(url)
-            })
-            
         }
+        .onAppear {
+            authVM.setContext(modelContext)
+        }
+
     }
 }
