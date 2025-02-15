@@ -6,33 +6,134 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C61EEC592D4E838A001083AB /* SupabaseSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61EEC582D4E838A001083AB /* SupabaseSyncManager.swift */; };
+		C61EEC5D2D500B23001083AB /* BuchDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61EEC5C2D500B23001083AB /* BuchDetails.swift */; };
+		C61EEC612D52685E001083AB /* SwiftDataSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61EEC602D52685E001083AB /* SwiftDataSyncManager.swift */; };
+		C61EEC762D5298F9001083AB /* NewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BC22D46A8380090BF3E /* NewSheet.swift */; };
+		C61EEC772D5298F9001083AB /* SupabaseSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61EEC582D4E838A001083AB /* SupabaseSyncManager.swift */; };
+		C61EEC782D5298F9001083AB /* Buch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BE82D47FFB80090BF3E /* Buch.swift */; };
+		C61EEC792D5298F9001083AB /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BD02D46AE8A0090BF3E /* Secrets.swift */; };
+		C61EEC7A2D5298F9001083AB /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BAF2D4697550090BF3E /* Preview.swift */; };
+		C61EEC7B2D5298F9001083AB /* Autor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BAD2D4694FB0090BF3E /* Autor.swift */; };
+		C61EEC7C2D5298F9001083AB /* AuthVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BD12D46AE8A0090BF3E /* AuthVM.swift */; };
+		C61EEC7D2D5298F9001083AB /* NewBuchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BC52D46A8680090BF3E /* NewBuchSheet.swift */; };
+		C61EEC7E2D5298F9001083AB /* BuecherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BB32D469A1D0090BF3E /* BuecherView.swift */; };
+		C61EEC7F2D5298F9001083AB /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BD22D46AE8A0090BF3E /* AuthView.swift */; };
+		C61EEC802D5298F9001083AB /* AutorDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BB52D469BE50090BF3E /* AutorDetails.swift */; };
+		C61EEC812D5298F9001083AB /* SwiftDataSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61EEC602D52685E001083AB /* SwiftDataSyncManager.swift */; };
+		C61EEC822D5298F9001083AB /* AutorenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BB12D4698C80090BF3E /* AutorenView.swift */; };
+		C61EEC832D5298F9001083AB /* BuchDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61EEC5C2D500B23001083AB /* BuchDetails.swift */; };
+		C61EEC842D5298F9001083AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BA62D4694E30090BF3E /* ContentView.swift */; };
+		C61EEC852D5298F9001083AB /* NewAutorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BBA2D46A7500090BF3E /* NewAutorSheet.swift */; };
+		C61EEC862D529906001083AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6A82BA52D4694E30090BF3E /* Assets.xcassets */; };
+		C61EEC892D52997D001083AB /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = C61EEC882D52997D001083AB /* Auth */; };
+		C61EEC8B2D52997D001083AB /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = C61EEC8A2D52997D001083AB /* Functions */; };
+		C61EEC8D2D52997D001083AB /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = C61EEC8C2D52997D001083AB /* PostgREST */; };
+		C61EEC8F2D52997D001083AB /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = C61EEC8E2D52997D001083AB /* Realtime */; };
+		C61EEC912D52997D001083AB /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = C61EEC902D52997D001083AB /* Storage */; };
+		C61EEC932D52997D001083AB /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = C61EEC922D52997D001083AB /* Supabase */; };
+		C6A82BA92D4694E30090BF3E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BA62D4694E30090BF3E /* ContentView.swift */; };
+		C6A82BAA2D4694E30090BF3E /* SwiftDataSupabaseSyncTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BA72D4694E30090BF3E /* SwiftDataSupabaseSyncTestApp.swift */; };
+		C6A82BAB2D4694E30090BF3E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6A82BA32D4694E30090BF3E /* Preview Assets.xcassets */; };
+		C6A82BAC2D4694E30090BF3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6A82BA52D4694E30090BF3E /* Assets.xcassets */; };
+		C6A82BAE2D4694FB0090BF3E /* Autor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BAD2D4694FB0090BF3E /* Autor.swift */; };
+		C6A82BB02D4697550090BF3E /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BAF2D4697550090BF3E /* Preview.swift */; };
+		C6A82BB22D4698C80090BF3E /* AutorenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BB12D4698C80090BF3E /* AutorenView.swift */; };
+		C6A82BB42D469A1D0090BF3E /* BuecherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BB32D469A1D0090BF3E /* BuecherView.swift */; };
+		C6A82BB62D469BE50090BF3E /* AutorDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BB52D469BE50090BF3E /* AutorDetails.swift */; };
+		C6A82BBB2D46A7500090BF3E /* NewAutorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BBA2D46A7500090BF3E /* NewAutorSheet.swift */; };
+		C6A82BC12D46A7C10090BF3E /* HelpersLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = C6A82BC02D46A7C10090BF3E /* HelpersLibrary */; };
+		C6A82BC32D46A8380090BF3E /* NewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BC22D46A8380090BF3E /* NewSheet.swift */; };
+		C6A82BC62D46A8680090BF3E /* NewBuchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BC52D46A8680090BF3E /* NewBuchSheet.swift */; };
+		C6A82BD72D46AE8A0090BF3E /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BD22D46AE8A0090BF3E /* AuthView.swift */; };
+		C6A82BD92D46AE8A0090BF3E /* AuthVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BD12D46AE8A0090BF3E /* AuthVM.swift */; };
+		C6A82BDA2D46AE8A0090BF3E /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BD02D46AE8A0090BF3E /* Secrets.swift */; };
+		C6A82BDD2D46B7110090BF3E /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = C6A82BDC2D46B7110090BF3E /* Auth */; };
+		C6A82BDF2D46B7110090BF3E /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = C6A82BDE2D46B7110090BF3E /* Functions */; };
+		C6A82BE12D46B7110090BF3E /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = C6A82BE02D46B7110090BF3E /* PostgREST */; };
+		C6A82BE32D46B7110090BF3E /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = C6A82BE22D46B7110090BF3E /* Realtime */; };
+		C6A82BE52D46B7110090BF3E /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = C6A82BE42D46B7110090BF3E /* Storage */; };
+		C6A82BE72D46B7110090BF3E /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = C6A82BE62D46B7110090BF3E /* Supabase */; };
+		C6A82BE92D47FFB80090BF3E /* Buch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BE82D47FFB80090BF3E /* Buch.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		C61EEC582D4E838A001083AB /* SupabaseSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseSyncManager.swift; sourceTree = "<group>"; };
+		C61EEC5C2D500B23001083AB /* BuchDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuchDetails.swift; sourceTree = "<group>"; };
+		C61EEC602D52685E001083AB /* SwiftDataSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataSyncManager.swift; sourceTree = "<group>"; };
+		C61EEC662D5298CA001083AB /* SwiftDataSupabaseSyncTestMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDataSupabaseSyncTestMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6A82B922D4694BC0090BF3E /* SwiftDataSupabaseSyncTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDataSupabaseSyncTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6A82BA32D4694E30090BF3E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C6A82BA52D4694E30090BF3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C6A82BA62D4694E30090BF3E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C6A82BA72D4694E30090BF3E /* SwiftDataSupabaseSyncTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataSupabaseSyncTestApp.swift; sourceTree = "<group>"; };
+		C6A82BAD2D4694FB0090BF3E /* Autor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Autor.swift; sourceTree = "<group>"; };
+		C6A82BAF2D4697550090BF3E /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
+		C6A82BB12D4698C80090BF3E /* AutorenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutorenView.swift; sourceTree = "<group>"; };
+		C6A82BB32D469A1D0090BF3E /* BuecherView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuecherView.swift; sourceTree = "<group>"; };
+		C6A82BB52D469BE50090BF3E /* AutorDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutorDetails.swift; sourceTree = "<group>"; };
+		C6A82BBA2D46A7500090BF3E /* NewAutorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAutorSheet.swift; sourceTree = "<group>"; };
+		C6A82BC22D46A8380090BF3E /* NewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSheet.swift; sourceTree = "<group>"; };
+		C6A82BC52D46A8680090BF3E /* NewBuchSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewBuchSheet.swift; sourceTree = "<group>"; };
+		C6A82BD02D46AE8A0090BF3E /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		C6A82BD12D46AE8A0090BF3E /* AuthVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthVM.swift; sourceTree = "<group>"; };
+		C6A82BD22D46AE8A0090BF3E /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		C6A82BE82D47FFB80090BF3E /* Buch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		C6A82B942D4694BC0090BF3E /* SwiftDataSupabaseSyncTest */ = {
+		C61EEC672D5298CA001083AB /* SwiftDataSupabaseSyncTestMac */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SwiftDataSupabaseSyncTest;
+			path = SwiftDataSupabaseSyncTestMac;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C61EEC632D5298CA001083AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C61EEC8D2D52997D001083AB /* PostgREST in Frameworks */,
+				C61EEC8B2D52997D001083AB /* Functions in Frameworks */,
+				C61EEC932D52997D001083AB /* Supabase in Frameworks */,
+				C61EEC892D52997D001083AB /* Auth in Frameworks */,
+				C61EEC912D52997D001083AB /* Storage in Frameworks */,
+				C61EEC8F2D52997D001083AB /* Realtime in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C6A82B8F2D4694BC0090BF3E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6A82BE72D46B7110090BF3E /* Supabase in Frameworks */,
+				C6A82BE52D46B7110090BF3E /* Storage in Frameworks */,
+				C6A82BE12D46B7110090BF3E /* PostgREST in Frameworks */,
+				C6A82BDF2D46B7110090BF3E /* Functions in Frameworks */,
+				C6A82BDD2D46B7110090BF3E /* Auth in Frameworks */,
+				C6A82BE32D46B7110090BF3E /* Realtime in Frameworks */,
+				C6A82BC12D46A7C10090BF3E /* HelpersLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C61EEC872D52997D001083AB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C6A82B892D4694BB0090BF3E = {
 			isa = PBXGroup;
 			children = (
-				C6A82B942D4694BC0090BF3E /* SwiftDataSupabaseSyncTest */,
+				C6A82BA82D4694E30090BF3E /* SwiftDataSupabaseSyncTest */,
+				C61EEC672D5298CA001083AB /* SwiftDataSupabaseSyncTestMac */,
+				C61EEC872D52997D001083AB /* Frameworks */,
 				C6A82B932D4694BC0090BF3E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,13 +142,116 @@
 			isa = PBXGroup;
 			children = (
 				C6A82B922D4694BC0090BF3E /* SwiftDataSupabaseSyncTest.app */,
+				C61EEC662D5298CA001083AB /* SwiftDataSupabaseSyncTestMac.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		C6A82BA42D4694E30090BF3E /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				C6A82BA32D4694E30090BF3E /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C6A82BA82D4694E30090BF3E /* SwiftDataSupabaseSyncTest */ = {
+			isa = PBXGroup;
+			children = (
+				C6A82BA52D4694E30090BF3E /* Assets.xcassets */,
+				C6A82BA72D4694E30090BF3E /* SwiftDataSupabaseSyncTestApp.swift */,
+				C6A82BB72D46A7130090BF3E /* Model */,
+				C6A82BD52D46AE8A0090BF3E /* Supabase */,
+				C6A82BB82D46A7250090BF3E /* Views */,
+				C6A82BB92D46A72B0090BF3E /* Sheets */,
+				C6A82BC42D46A83F0090BF3E /* Helpers */,
+				C6A82BA42D4694E30090BF3E /* Preview Content */,
+			);
+			path = SwiftDataSupabaseSyncTest;
+			sourceTree = "<group>";
+		};
+		C6A82BB72D46A7130090BF3E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C6A82BAD2D4694FB0090BF3E /* Autor.swift */,
+				C6A82BE82D47FFB80090BF3E /* Buch.swift */,
+				C6A82BAF2D4697550090BF3E /* Preview.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C6A82BB82D46A7250090BF3E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C6A82BA62D4694E30090BF3E /* ContentView.swift */,
+				C6A82BB12D4698C80090BF3E /* AutorenView.swift */,
+				C6A82BB32D469A1D0090BF3E /* BuecherView.swift */,
+				C6A82BB52D469BE50090BF3E /* AutorDetails.swift */,
+				C61EEC5C2D500B23001083AB /* BuchDetails.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C6A82BB92D46A72B0090BF3E /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				C6A82BBA2D46A7500090BF3E /* NewAutorSheet.swift */,
+				C6A82BC52D46A8680090BF3E /* NewBuchSheet.swift */,
+			);
+			path = Sheets;
+			sourceTree = "<group>";
+		};
+		C6A82BC42D46A83F0090BF3E /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				C6A82BC22D46A8380090BF3E /* NewSheet.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		C6A82BD52D46AE8A0090BF3E /* Supabase */ = {
+			isa = PBXGroup;
+			children = (
+				C6A82BD02D46AE8A0090BF3E /* Secrets.swift */,
+				C6A82BD12D46AE8A0090BF3E /* AuthVM.swift */,
+				C6A82BD22D46AE8A0090BF3E /* AuthView.swift */,
+				C61EEC582D4E838A001083AB /* SupabaseSyncManager.swift */,
+				C61EEC602D52685E001083AB /* SwiftDataSyncManager.swift */,
+			);
+			path = Supabase;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C61EEC652D5298CA001083AB /* SwiftDataSupabaseSyncTestMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C61EEC722D5298CC001083AB /* Build configuration list for PBXNativeTarget "SwiftDataSupabaseSyncTestMac" */;
+			buildPhases = (
+				C61EEC622D5298CA001083AB /* Sources */,
+				C61EEC632D5298CA001083AB /* Frameworks */,
+				C61EEC642D5298CA001083AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C61EEC672D5298CA001083AB /* SwiftDataSupabaseSyncTestMac */,
+			);
+			name = SwiftDataSupabaseSyncTestMac;
+			packageProductDependencies = (
+				C61EEC882D52997D001083AB /* Auth */,
+				C61EEC8A2D52997D001083AB /* Functions */,
+				C61EEC8C2D52997D001083AB /* PostgREST */,
+				C61EEC8E2D52997D001083AB /* Realtime */,
+				C61EEC902D52997D001083AB /* Storage */,
+				C61EEC922D52997D001083AB /* Supabase */,
+			);
+			productName = SwiftDataSupabaseSyncTestMac;
+			productReference = C61EEC662D5298CA001083AB /* SwiftDataSupabaseSyncTestMac.app */;
+			productType = "com.apple.product-type.application";
+		};
 		C6A82B912D4694BC0090BF3E /* SwiftDataSupabaseSyncTest */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C6A82BA02D4694BD0090BF3E /* Build configuration list for PBXNativeTarget "SwiftDataSupabaseSyncTest" */;
@@ -60,11 +264,15 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				C6A82B942D4694BC0090BF3E /* SwiftDataSupabaseSyncTest */,
-			);
 			name = SwiftDataSupabaseSyncTest;
 			packageProductDependencies = (
+				C6A82BC02D46A7C10090BF3E /* HelpersLibrary */,
+				C6A82BDC2D46B7110090BF3E /* Auth */,
+				C6A82BDE2D46B7110090BF3E /* Functions */,
+				C6A82BE02D46B7110090BF3E /* PostgREST */,
+				C6A82BE22D46B7110090BF3E /* Realtime */,
+				C6A82BE42D46B7110090BF3E /* Storage */,
+				C6A82BE62D46B7110090BF3E /* Supabase */,
 			);
 			productName = SwiftDataSupabaseSyncTest;
 			productReference = C6A82B922D4694BC0090BF3E /* SwiftDataSupabaseSyncTest.app */;
@@ -80,6 +288,9 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					C61EEC652D5298CA001083AB = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					C6A82B912D4694BC0090BF3E = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -94,37 +305,150 @@
 			);
 			mainGroup = C6A82B892D4694BB0090BF3E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C6A82BBF2D46A7C10090BF3E /* XCRemoteSwiftPackageReference "HelpersLibrary" */,
+				C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C6A82B932D4694BC0090BF3E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				C6A82B912D4694BC0090BF3E /* SwiftDataSupabaseSyncTest */,
+				C61EEC652D5298CA001083AB /* SwiftDataSupabaseSyncTestMac */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C61EEC642D5298CA001083AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C61EEC862D529906001083AB /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C6A82B902D4694BC0090BF3E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6A82BAB2D4694E30090BF3E /* Preview Assets.xcassets in Resources */,
+				C6A82BAC2D4694E30090BF3E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C61EEC622D5298CA001083AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C61EEC762D5298F9001083AB /* NewSheet.swift in Sources */,
+				C61EEC772D5298F9001083AB /* SupabaseSyncManager.swift in Sources */,
+				C61EEC782D5298F9001083AB /* Buch.swift in Sources */,
+				C61EEC792D5298F9001083AB /* Secrets.swift in Sources */,
+				C61EEC7A2D5298F9001083AB /* Preview.swift in Sources */,
+				C61EEC7B2D5298F9001083AB /* Autor.swift in Sources */,
+				C61EEC7C2D5298F9001083AB /* AuthVM.swift in Sources */,
+				C61EEC7D2D5298F9001083AB /* NewBuchSheet.swift in Sources */,
+				C61EEC7E2D5298F9001083AB /* BuecherView.swift in Sources */,
+				C61EEC7F2D5298F9001083AB /* AuthView.swift in Sources */,
+				C61EEC802D5298F9001083AB /* AutorDetails.swift in Sources */,
+				C61EEC812D5298F9001083AB /* SwiftDataSyncManager.swift in Sources */,
+				C61EEC822D5298F9001083AB /* AutorenView.swift in Sources */,
+				C61EEC832D5298F9001083AB /* BuchDetails.swift in Sources */,
+				C61EEC842D5298F9001083AB /* ContentView.swift in Sources */,
+				C61EEC852D5298F9001083AB /* NewAutorSheet.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C6A82B8E2D4694BC0090BF3E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6A82BC62D46A8680090BF3E /* NewBuchSheet.swift in Sources */,
+				C6A82BE92D47FFB80090BF3E /* Buch.swift in Sources */,
+				C6A82BC32D46A8380090BF3E /* NewSheet.swift in Sources */,
+				C6A82BAE2D4694FB0090BF3E /* Autor.swift in Sources */,
+				C61EEC5D2D500B23001083AB /* BuchDetails.swift in Sources */,
+				C6A82BA92D4694E30090BF3E /* ContentView.swift in Sources */,
+				C6A82BB02D4697550090BF3E /* Preview.swift in Sources */,
+				C61EEC592D4E838A001083AB /* SupabaseSyncManager.swift in Sources */,
+				C6A82BD72D46AE8A0090BF3E /* AuthView.swift in Sources */,
+				C6A82BD92D46AE8A0090BF3E /* AuthVM.swift in Sources */,
+				C6A82BDA2D46AE8A0090BF3E /* Secrets.swift in Sources */,
+				C61EEC612D52685E001083AB /* SwiftDataSyncManager.swift in Sources */,
+				C6A82BB42D469A1D0090BF3E /* BuecherView.swift in Sources */,
+				C6A82BBB2D46A7500090BF3E /* NewAutorSheet.swift in Sources */,
+				C6A82BB62D469BE50090BF3E /* AutorDetails.swift in Sources */,
+				C6A82BB22D4698C80090BF3E /* AutorenView.swift in Sources */,
+				C6A82BAA2D4694E30090BF3E /* SwiftDataSupabaseSyncTestApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		C61EEC732D5298CC001083AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SwiftDataSupabaseSyncTestMac/SwiftDataSupabaseSyncTestMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SwiftDataSupabaseSyncTestMac/Preview Content\"";
+				DEVELOPMENT_TEAM = TFWZ5CV5G4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.rohrers.SwiftDataSupabaseSyncTestMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C61EEC742D5298CC001083AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SwiftDataSupabaseSyncTestMac/SwiftDataSupabaseSyncTestMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SwiftDataSupabaseSyncTestMac/Preview Content\"";
+				DEVELOPMENT_TEAM = TFWZ5CV5G4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.rohrers.SwiftDataSupabaseSyncTestMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		C6A82B9E2D4694BD0090BF3E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -305,6 +629,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C61EEC722D5298CC001083AB /* Build configuration list for PBXNativeTarget "SwiftDataSupabaseSyncTestMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C61EEC732D5298CC001083AB /* Debug */,
+				C61EEC742D5298CC001083AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C6A82B8D2D4694BC0090BF3E /* Build configuration list for PBXProject "SwiftDataSupabaseSyncTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -324,6 +657,93 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C6A82BBF2D46A7C10090BF3E /* XCRemoteSwiftPackageReference "HelpersLibrary" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/chrisrohrer/HelpersLibrary";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C61EEC882D52997D001083AB /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		C61EEC8A2D52997D001083AB /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		C61EEC8C2D52997D001083AB /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		C61EEC8E2D52997D001083AB /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		C61EEC902D52997D001083AB /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		C61EEC922D52997D001083AB /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		C6A82BC02D46A7C10090BF3E /* HelpersLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BBF2D46A7C10090BF3E /* XCRemoteSwiftPackageReference "HelpersLibrary" */;
+			productName = HelpersLibrary;
+		};
+		C6A82BDC2D46B7110090BF3E /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		C6A82BDE2D46B7110090BF3E /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		C6A82BE02D46B7110090BF3E /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		C6A82BE22D46B7110090BF3E /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		C6A82BE42D46B7110090BF3E /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		C6A82BE62D46B7110090BF3E /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6A82BDB2D46B7110090BF3E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C6A82B8A2D4694BB0090BF3E /* Project object */;
 }

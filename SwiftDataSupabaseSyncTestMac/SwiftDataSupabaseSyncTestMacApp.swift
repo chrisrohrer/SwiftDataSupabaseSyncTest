@@ -1,15 +1,15 @@
 //
-//  SwiftDataSupabaseSyncTestApp.swift
-//  SwiftDataSupabaseSyncTest
+//  SwiftDataSupabaseSyncTestMacApp.swift
+//  SwiftDataSupabaseSyncTestMac
 //
-//  Created by Christoph Rohrer on 26.01.25.
+//  Created by Christoph Rohrer on 04.02.25.
 //
 
 import SwiftUI
 import SwiftData
 
 @main
-struct SwiftDataSupabaseSyncTestApp: App {
+struct SwiftDataSupabaseSyncTestMacApp: App {
     
     @StateObject var authVM = AuthVM()
 
