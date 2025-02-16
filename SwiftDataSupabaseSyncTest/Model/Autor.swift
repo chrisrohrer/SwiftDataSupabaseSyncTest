@@ -17,9 +17,8 @@ final class Autor {
     // Standards
     
     static let tableName: String = "Autor"
-    
     @Attribute(.unique) var id: UUID = UUID()
-    var updatedAt: Date = Date()
+    var updatedAt: Date = Date() // Letzter Sync-Zeitpunkt
     var isSynced: Bool = false // Kennzeichnet, ob die Änderung schon synchronisiert wurde
 
     // Attributes
@@ -47,9 +46,8 @@ final class Autor {
 
 struct AutorRemote: Codable {
     var id: UUID
-    var updatedat: Date
-    var issynced: Bool
-
+    var updatedAt: Date
+    var isDeleted: Bool
     var name: String
     var geburtsjahr: Int
     
@@ -57,12 +55,24 @@ struct AutorRemote: Codable {
     static func createFrom(_ autor: Autor) -> Self {
         return .init(
             id: autor.id,
-            updatedat: autor.updatedAt,
-            issynced: autor.isSynced,
+            updatedAt: autor.updatedAt,
+            isDeleted: false,
             name: autor.name,
             geburtsjahr: autor.geburtsjahr
         )
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case updatedAt = "updated_at"
+        case isDeleted = "is_deleted"
+        case name
+        case geburtsjahr
+    }
+}
+
+
+extension AutorRemote {
     
     @MainActor
     func createOrUpdateAutor(modelContext: ModelContext) {
@@ -72,14 +82,20 @@ struct AutorRemote: Codable {
         if let existingAutor {
             existingAutor.name = self.name
             existingAutor.geburtsjahr = self.geburtsjahr
-            existingAutor.updatedAt = self.updatedat
+            existingAutor.updatedAt = self.updatedAt
             existingAutor.isSynced = true
         } else {
             let newAutor = Autor(name: self.name, geburtsjahr: self.geburtsjahr)
             newAutor.id = self.id
-            newAutor.updatedAt = self.updatedat
+            newAutor.updatedAt = self.updatedAt
             newAutor.isSynced = true
             modelContext.insert(newAutor)
+        }
+    }
+    
+    func deleteAutor(modelContext: ModelContext) {
+        if let autorToDelete = try? modelContext.fetch(FetchDescriptor<Autor>(predicate: #Predicate { $0.id == self.id })).first {
+            modelContext.delete(autorToDelete)
         }
     }
 }
@@ -90,7 +106,7 @@ struct AutorRemote: Codable {
 
 
 
-
+/*
 extension Autor {
     
     // subscribe to Supabase Realtime Updates
@@ -134,3 +150,4 @@ extension Autor {
         }
     }
 }
+*/

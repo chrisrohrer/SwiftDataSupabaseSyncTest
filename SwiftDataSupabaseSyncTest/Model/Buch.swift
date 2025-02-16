@@ -14,58 +14,77 @@ import Realtime
 @Model
 final class Buch {
     
+    // Standards
+
+    static let tableName: String = "Buch"
+    @Attribute(.unique) var id: UUID = UUID()
+    var updatedAt: Date = Date() // Letzter Sync-Zeitpunkt
+    var isSynced: Bool = false // Kennzeichnet, ob die Änderung schon synchronisiert wurde
+
+    // Attributes
+
+    var titel: String = ""
+    var seiten: Int = 0
+    
+    // Relations
+
+    var autor: Autor?
+    
+    // Init
+
     internal init(titel: String = "", seiten: Int = 0, autor: Autor?) {
         self.titel = titel
         self.seiten = seiten
         self.autor = autor
     }
-    
-    static let tableName: String = "Buch"
 
-    @Attribute(.unique) var id: UUID = UUID()
-    var updatedAt: Date = Date()
-    var isSynced: Bool = false // Kennzeichnet, ob die Änderung schon synchronisiert wurde
-
-    var titel: String = ""
-    var seiten: Int = 0
-    
-    var autor: Autor?
-    
 }
 
 struct BuchRemote: Codable {
     var id: UUID
-    var updatedat: Date
-    var issynced: Bool
-    
+    var updatedAt: Date
+    var isDeleted: Bool
     var titel: String
     var seiten: Int
     
     // foreign key reference from Supabase
-    var autorid: UUID?
+    var autorID: UUID?
     
     static func createFrom(_ buch: Buch) -> Self {
         return .init(
             id: buch.id,
-            updatedat: buch.updatedAt,
-            issynced: buch.isSynced,
+            updatedAt: buch.updatedAt,
+            isDeleted: false,
             titel: buch.titel,
             seiten: buch.seiten,
-            autorid: buch.autor?.id
+            autorID: buch.autor?.id
         )
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case updatedAt = "updated_at"
+        case isDeleted = "is_deleted"
+        case titel
+        case seiten
+        case autorID = "autor_id"
+    }
+}
+
+
+extension BuchRemote {
     
     func createOrUpdateBuch(modelContext: ModelContext) {
         
         let existingBuch = try? modelContext.fetch(FetchDescriptor<Buch>(predicate: #Predicate { $0.id == self.id })).first
         
         let falseID = UUID()
-        let autor = try? modelContext.fetch(FetchDescriptor<Autor>(predicate: #Predicate { $0.id == self.autorid ?? falseID })).first
+        let autor = try? modelContext.fetch(FetchDescriptor<Autor>(predicate: #Predicate { $0.id == self.autorID ?? falseID })).first
 
         if let existingBuch {
             existingBuch.titel = self.titel
             existingBuch.seiten = self.seiten
-            existingBuch.updatedAt = self.updatedat
+            existingBuch.updatedAt = self.updatedAt
             existingBuch.autor = autor
             existingBuch.isSynced = true
             
@@ -73,10 +92,16 @@ struct BuchRemote: Codable {
             if let autor {
                 let newBuch = Buch(titel: self.titel, seiten: self.seiten, autor: autor)
                 newBuch.id = self.id
-                newBuch.updatedAt = self.updatedat
+                newBuch.updatedAt = self.updatedAt
                 newBuch.isSynced = true
                 modelContext.insert(newBuch)
             }
+        }
+    }
+
+    func deleteBuch(modelContext: ModelContext) {
+        if let buchToDelete = try? modelContext.fetch(FetchDescriptor<Buch>(predicate: #Predicate { $0.id == self.id })).first {
+            modelContext.delete(buchToDelete)
         }
     }
 
@@ -85,7 +110,7 @@ struct BuchRemote: Codable {
 
 
 
-
+/*
 extension Buch {
     
     // subscribe to Supabase Realtime Updates
@@ -126,3 +151,4 @@ extension Buch {
         }
     }
 }
+*/

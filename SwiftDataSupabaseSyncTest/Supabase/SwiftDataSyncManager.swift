@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 import Combine
 import Supabase
+import AppKit
 
 @MainActor
 final class SwiftDataSyncManager {
@@ -16,9 +17,11 @@ final class SwiftDataSyncManager {
     
     private var modelContext: ModelContext?
     private var cancellables: Set<AnyCancellable> = []
-    
-    private init() {}
-    
+        
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate), name: NSApplication.willTerminateNotification, object: nil)
+    }
+
     func startObservingContext(_ context: ModelContext) {
         print("🔄 SwiftDataSyncManager: Starting observing ...")
         self.modelContext = context
@@ -30,7 +33,7 @@ final class SwiftDataSyncManager {
         NotificationCenter.default.publisher(for: ModelContext.willSave)
             .sink { [weak self] notification in
                 
-                if SupabaseSyncManager.shared.isSyncing {
+                if SupabaseSyncManager.shared.isSyncing || SupabaseSyncManager.shared.isUploading || SupabaseSyncManager.shared.isDownloading {
                     print("🔀 SwiftDataSyncManager: Supabase is syncing ... Not reacting to changes")
                     return
                 }
@@ -134,6 +137,28 @@ final class SwiftDataSyncManager {
     }
     
     
+    @objc private func appWillTerminate() {
+        guard let modelContext = self.modelContext else { return }
+
+        print("🔄 App is quitting: Attempting to upload unsynced changes...")
+
+        let taskID = ProcessInfo.processInfo.beginActivity(options: .background, reason: "Uploading pending changes before quitting")
+
+        Task { @MainActor in
+            do {
+                try modelContext.save() // ✅ Ensure local save
+                try await SupabaseSyncManager.shared.uploadLocalChanges(modelContext: modelContext)
+                print("✅ All changes uploaded before quitting")
+            } catch {
+                print("❌ Error uploading data before quitting: \(error)")
+            }
+
+            ProcessInfo.processInfo.endActivity(taskID) // ✅ Allow quitting after best-effort upload
+        }
+
+        print("🛑 App is quitting now. Best-effort sync completed. Any remaining uploads will continue on next launch.")
+    }
+
     
     /*
      
