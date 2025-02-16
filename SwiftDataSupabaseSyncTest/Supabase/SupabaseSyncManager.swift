@@ -39,7 +39,7 @@ final class SupabaseSyncManager {
         let remoteAutoren: [AutorRemote] = unsyncedAutoren.map { AutorRemote.createFrom($0) }
         let remoteBuecher: [BuchRemote] = unsyncedBuecher.map { BuchRemote.createFrom($0) }
         
-        print(">>> SupabaseSyncManager: uploadLocalChanges")
+        print("⤴️ SupabaseSyncManager: uploadLocalChanges")
         
         isSyncing = true
 
@@ -81,7 +81,7 @@ final class SupabaseSyncManager {
         try modelContext.save()
         
         isSyncing = false
-        isUploading = false // 🚀 Reset the flag
+        isUploading = false // Reset the flag
     }
     
     
@@ -92,7 +92,7 @@ final class SupabaseSyncManager {
     @MainActor
     func fetchRemoteChanges(modelContext: ModelContext) async throws {
         
-        print("<<< SupabaseSyncManager: fetchRemoteChanges")
+        print("⤵️ SupabaseSyncManager: fetchRemoteChanges")
         
         let lastSyncDate = UserDefaults.standard.object(forKey: "lastSyncDate") as? Date ?? Date.distantPast
         
@@ -138,7 +138,7 @@ final class SupabaseSyncManager {
     /// start listening to realtime changes in supabase
     /// can only be one channel!
     func startRealtimeSync(modelContext: ModelContext) {
-        print("<<< SupabaseSyncManager: Starting sync ...")
+        print("🔄 SupabaseSyncManager: Starting sync ...")
         Task {
             await subscribeToChanges(modelContext: modelContext)
         }
@@ -157,10 +157,10 @@ final class SupabaseSyncManager {
         for await change in changeStream {
             
             if self.isSyncing {
-                print("<<< SupabaseSyncManager: is syncing ...")
+//                print("<<< SupabaseSyncManager: is syncing ...")
             } else {
                 
-                print("<<< SupabaseSyncManager: Change detected", change.rawMessage.payload)
+                print("⤵️ SupabaseSyncManager: Change detected", change.rawMessage.payload)
                 self.isSyncing = true
                 Task { @MainActor in
                     self.handleChange(change: change, modelContext: modelContext)

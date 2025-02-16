@@ -21,6 +21,5 @@ struct SwiftDataSupabaseSyncTestApp: App {
         }
         .modelContainer(modelContainer)
         .environmentObject(authVM)
-
     }
 }

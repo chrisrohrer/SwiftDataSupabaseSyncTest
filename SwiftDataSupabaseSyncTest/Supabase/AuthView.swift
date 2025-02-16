@@ -19,9 +19,12 @@ struct AuthView: View {
 
     var body: some View {
         
-        Group {
             if authVM.isAuthenticated  {
                 ContentView()
+                    .onAppear {
+                        authVM.setContext(modelContext)
+                    }
+
             } else if authVM.isLoading {
                 ProgressView()
             } else {
@@ -54,10 +57,5 @@ struct AuthView: View {
                 })
                 
             }
-        }
-        .onAppear {
-            authVM.setContext(modelContext)
-        }
-
     }
 }

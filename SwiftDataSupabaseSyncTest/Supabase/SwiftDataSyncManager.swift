@@ -19,24 +19,25 @@ final class SwiftDataSyncManager {
     
     private init() {}
     
-    func setModelContext(_ context: ModelContext) {
+    func startObservingContext(_ context: ModelContext) {
+        print("🔄 SwiftDataSyncManager: Starting observing ...")
         self.modelContext = context
         observeModelChanges()
     }
     
     private func observeModelChanges() {
-        print(">>> SwiftDataSyncManager: Starting observing ...")
+
         NotificationCenter.default.publisher(for: ModelContext.willSave)
             .sink { [weak self] notification in
                 
                 if SupabaseSyncManager.shared.isSyncing {
-                    print(">>> SwiftDataSyncManager: Supabase is syncing ... Not reacting to changes")
+                    print("🔀 SwiftDataSyncManager: Supabase is syncing ... Not reacting to changes")
                     return
                 }
                 
                 self?.handleModelChangesWillSave()
                 
-                // ✅ Call upload after marking as unsynced
+                // Call upload after marking as unsynced
                 Task {
                     do {
                         if let modelContext = self?.modelContext {
@@ -51,22 +52,26 @@ final class SwiftDataSyncManager {
             .store(in: &cancellables)
     }
     
+    
     private func handleModelChangesWillSave() {
-        print(">>> SwiftDataSyncManager ... handling change")
+//        if SupabaseSyncManager.shared.isSyncing {
+//            return
+//        }
         
         guard let modelContext else {
             print("Error: no ModelContext")
             return
         }
         
-        if SupabaseSyncManager.shared.isSyncing {
-            print(">>> SwiftDataSyncManager: Supabase is syncing ... Not reacting to changes")
-            return
-        }
-
         let inserted = modelContext.insertedModelsArray
         let updated = modelContext.changedModelsArray
         let deleted = modelContext.deletedModelsArray
+
+        if (inserted + updated + deleted).isEmpty {
+            return
+        }
+        
+        print("🔁 SwiftDataSyncManager ... handling change")
         
         if inserted.isEmpty == false {
             print("--- inserted: ")
@@ -181,9 +186,5 @@ final class SwiftDataSyncManager {
          }
          
      }
-     
-     
-
-     
      */
 }

@@ -29,7 +29,7 @@ final class AuthVM: ObservableObject {
     }
     
     private var modelContext: ModelContext? // ✅ Store model context
-    private var didSync = false
+    private var didInitializeSync = false
     
     init() {
         subscribeToAuthChanges()
@@ -59,8 +59,8 @@ final class AuthVM: ObservableObject {
                         self.userId = state.session?.user.id
                         self.user = state.session?.user.email
                         
-                        print("Users Auth changed:", state.event, isAuthenticated)
-                        print("AuthVM **** Role:", role as Any, "user:", user as Any, "userId:", self.userId as Any)
+                        print("🔒 AuthVM: Auth changed:", state.event, "user:", user as Any, "authenticated:", isAuthenticated)
+//                        print("🔒AuthVM: **** Role:", role as Any, "user:", user as Any, "userId:", self.userId as Any)
                         self.isLoading = false
                     }
                 }
@@ -97,18 +97,19 @@ final class AuthVM: ObservableObject {
     
     @MainActor
     private func setupSync() {
-        guard let modelContext, didSync == false else { return } // ✅ Prevent multiple initializations
+        guard let modelContext, didInitializeSync == false else { return } // ✅ Prevent multiple initializations
+        didInitializeSync = true
         
         Task { @MainActor in
             do {
-                print(">>> Initializing Supabase Sync...")
+                print("🔄 Initializing all Syncs...")
                 try await SupabaseSyncManager.shared.fetchRemoteChanges(modelContext: modelContext)
                 try await SupabaseSyncManager.shared.uploadLocalChanges(modelContext: modelContext)
                 SupabaseSyncManager.shared.startRealtimeSync(modelContext: modelContext)
-                SwiftDataSyncManager.shared.setModelContext(modelContext)
+                SwiftDataSyncManager.shared.startObservingContext(modelContext)
                 
             } catch {
-                print("Error initializing sync: \(error)")
+                print("🔄 Error initializing sync: \(error)")
             }
         }
     }
