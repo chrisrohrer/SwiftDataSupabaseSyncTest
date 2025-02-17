@@ -14,7 +14,7 @@ struct SwiftDataSupabaseSyncTestApp: App {
     @StateObject var authVM = AuthVM()
 
     @State private var modelContainer = try! ModelContainer(for: Autor.self, Buch.self)
-
+        
     var body: some Scene {
         WindowGroup {
             AuthView()

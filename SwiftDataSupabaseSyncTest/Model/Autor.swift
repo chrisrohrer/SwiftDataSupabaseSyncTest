@@ -20,6 +20,7 @@ final class Autor {
     @Attribute(.unique) var id: UUID = UUID()
     var updatedAt: Date = Date() // Letzter Sync-Zeitpunkt
     var isSynced: Bool = false // Kennzeichnet, ob die Änderung schon synchronisiert wurde
+    var softDeleted: Bool = false // Soft delete flag
 
     // Attributes
     
@@ -38,6 +39,16 @@ final class Autor {
         self.geburtsjahr = geburtsjahr
     }
     
+    func softDelete(modelContext: ModelContext) {
+        self.softDeleted = true
+        self.updatedAt = .now
+        self.isSynced = false
+        do {
+            try modelContext.save()
+        } catch {
+            print(#function, error)
+        }
+    }
 
 }
 
@@ -47,7 +58,7 @@ final class Autor {
 struct AutorRemote: Codable {
     var id: UUID
     var updatedAt: Date
-    var isDeleted: Bool
+    var softDeleted: Bool
     var name: String
     var geburtsjahr: Int
     
@@ -56,7 +67,7 @@ struct AutorRemote: Codable {
         return .init(
             id: autor.id,
             updatedAt: autor.updatedAt,
-            isDeleted: false,
+            softDeleted: autor.softDeleted,
             name: autor.name,
             geburtsjahr: autor.geburtsjahr
         )
@@ -65,7 +76,7 @@ struct AutorRemote: Codable {
     enum CodingKeys: String, CodingKey {
         case id
         case updatedAt = "updated_at"
-        case isDeleted = "is_deleted"
+        case softDeleted = "is_deleted"
         case name
         case geburtsjahr
     }
@@ -84,6 +95,7 @@ extension AutorRemote {
             existingAutor.geburtsjahr = self.geburtsjahr
             existingAutor.updatedAt = self.updatedAt
             existingAutor.isSynced = true
+            existingAutor.softDeleted = self.softDeleted
         } else {
             let newAutor = Autor(name: self.name, geburtsjahr: self.geburtsjahr)
             newAutor.id = self.id
@@ -93,11 +105,13 @@ extension AutorRemote {
         }
     }
     
-    func deleteAutor(modelContext: ModelContext) {
-        if let autorToDelete = try? modelContext.fetch(FetchDescriptor<Autor>(predicate: #Predicate { $0.id == self.id })).first {
-            modelContext.delete(autorToDelete)
-        }
-    }
+//    func deleteAutor(modelContext: ModelContext) {
+//        if let autorToDelete = try? modelContext.fetch(FetchDescriptor<Autor>(predicate: #Predicate { $0.id == self.id })).first {
+//            autorToDelete.softDeleted = true
+//            autorToDelete.updatedAt = self.updatedAt
+//            autorToDelete.isSynced = true
+//        }
+//    }
 }
 
 

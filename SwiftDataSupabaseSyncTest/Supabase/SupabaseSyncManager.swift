@@ -9,16 +9,15 @@ import Foundation
 import Supabase
 import SwiftData
 
-
+//@MainActor
 final class SupabaseSyncManager {
     
     static let shared = SupabaseSyncManager()
     
     private var modelContext: ModelContext? // ✅ Store ModelContext safely
 
-    var isSyncing = false
-    var isUploading = false // 🚀 NEW FLAG
-    var isDownloading = false // 🚀 NEW FLAG
+    var isUploading = false
+    var isDownloading = false
 
     // darf nur einer sein für alle Changes!
     private var subscriptionChannel: RealtimeChannelV2?
@@ -30,12 +29,30 @@ final class SupabaseSyncManager {
     private init() {}
     
     
+    struct UpdatedAtRecord: Decodable {
+        let updated_at: Date
+    }
+
+    func setContext(_ context: ModelContext) {
+        self.modelContext = context
+    }
+
+    
+    
     // MARK: - Upload Local Changes
     
-    /// one time upload of all local changes to supabase, called manually
+    /// upload of all local changes to supabase, as defined by `model.isSynced == false`
     @MainActor
-    func uploadLocalChanges(modelContext: ModelContext) async throws {
+    func uploadLocalChanges() async throws {
         
+        defer {
+            isUploading = false // Reset the flag
+        }
+                
+        guard let modelContext else {
+            print("⚠️ SupabaseSyncManager: uploadLocalChanges: no ModelContext set!")
+            return
+        }
         if isUploading { return }
         isUploading = true
 
@@ -50,47 +67,84 @@ final class SupabaseSyncManager {
         }
 
         print("⤴️ SupabaseSyncManager: uploadLocalChanges")
-
-        let remoteAutoren: [AutorRemote] = unsyncedAutoren.map { AutorRemote.createFrom($0) }
-        let remoteBuecher: [BuchRemote] = unsyncedBuecher.map { BuchRemote.createFrom($0) }
         
-        isSyncing = true
-
-        if !remoteAutoren.isEmpty {
+        if !unsyncedAutoren.isEmpty {
             
             print("--- upload Autoren")
             
-            let response = try await supabase
-                .from("Autor")
-                .upsert(remoteAutoren)
-                .execute()
-            
-            if response.status == 201 || response.status == 200 { // Only mark as synced if successful
-                for autor in unsyncedAutoren { autor.isSynced = true }
-            } else {
-                print("Failed to upload Autoren: \(response)")
+            for autor in unsyncedAutoren {
+                print("🚨 Uploading Autor:", autor.name, "isDeleted:", autor.softDeleted)
+
+                // 🔍 Fetch the latest `updated_at` from Supabase before upserting
+                let latestServerRecord: [UpdatedAtRecord] = try await supabase
+                    .from("Autor")
+                    .select("updated_at")
+                    .eq("id", value: autor.id.uuidString)
+                    .execute()
+                    .value
+                
+                if let serverAutor = latestServerRecord.first,
+                   serverAutor.updated_at > autor.updatedAt {
+                    
+                    print("⚠️ Conflict detected for \(autor.name), skipping upload")
+                    continue //  Don't upload if the server version is newer
+                }
+
+                let autorRemote = AutorRemote.createFrom(autor)
+                print("Autor", autor.softDeleted)
+                print("AutorRemote", autorRemote.softDeleted)
+                let response = try await supabase
+                    .from("Autor")
+                    .upsert(autorRemote)
+                    .execute()
+
+                if response.status == 201 || response.status == 200 || response.status == 204 {
+                    autor.isSynced = true
+                } else {
+                    print("Failed to upload Autor: \(response)")
+                }
             }
         }
         
-        if !remoteBuecher.isEmpty {
+        
+        if !unsyncedBuecher.isEmpty {
             
             print("--- upload Bücher")
             
-            let response = try await supabase
-                .from("Buch")
-                .upsert(remoteBuecher)
-                .execute()
-            
-            if response.status == 201 || response.status == 200 {
-                for buch in unsyncedBuecher { buch.isSynced = true }
-            } else {
-                print("Failed to upload Bücher: \(response)")
+            for buch in unsyncedBuecher {
+                // 🔍 Fetch the latest `updated_at` from Supabase before upserting
+                let latestServerRecord: [UpdatedAtRecord] = try await supabase
+                    .from("Buch")
+                    .select("updated_at")
+                    .eq("id", value: buch.id.uuidString)
+                    .execute()
+                    .value
+
+                if let serverBuch = latestServerRecord.first,
+                    serverBuch.updated_at > buch.updatedAt {
+                    print("⚠️ Conflict detected for \(buch.titel), skipping upload")
+                    continue //  Don't upload if the server version is newer
+                }
+
+                let buchRemote = BuchRemote.createFrom(buch)
+                let response = try await supabase
+                    .from("Buch")
+                    .upsert(buchRemote)
+                    .execute()
+
+                // wenn ok, dann isSynced setzen
+                if response.status == 201 || response.status == 200 || response.status == 204 {
+                    buch.isSynced = true
+                } else {
+                    print("Failed to upload Buch: \(response)")
+                }
             }
+            
+            
         }
                         
         try modelContext.save()
-        
-        isSyncing = false
+
         isUploading = false // Reset the flag
     }
     
@@ -100,55 +154,71 @@ final class SupabaseSyncManager {
     
     /// one time fetch of all  changes in supabase to swiftdata, called manually
     @MainActor
-    func fetchRemoteChanges(modelContext: ModelContext) async throws {
+    func fetchRemoteChanges() async throws {
         
-        if isSyncing || isDownloading { return }
-        isSyncing = true
+        if isDownloading { return }
+
+        defer {
+            isDownloading = false
+        }
+
         isDownloading = true
         
         print("⤵️ SupabaseSyncManager: fetchRemoteChanges")
         
         let lastSyncDate = UserDefaults.standard.object(forKey: "lastSyncDate") as? Date ?? Date.distantPast
-        let daysSinceLastSync = Calendar.current.dateComponents([.day], from: lastSyncDate, to: Date()).day ?? 0
-        
+//        print("****", lastSyncDate)
+        let daysSinceLastSync = Calendar.current.dateComponents([.day], from: lastSyncDate, to: Date()).day ?? 100
+//        print("****", daysSinceLastSync)
         if daysSinceLastSync > 30 {
             print("🔄 User inactive for \(daysSinceLastSync) days. Performing full refresh...")
-            await performFullRefresh(modelContext: modelContext)
+            await performFullRefresh()
         } else {
-            print("⤵️ Performing incremental sync...")
-            await performIncrementalSync(modelContext: modelContext, lastSyncDate: lastSyncDate)
+            await performIncrementalSync(lastSyncDate: lastSyncDate)
         }
         
-        UserDefaults.standard.set(Date(), forKey: "last_sync_date")
-
-        isSyncing = false
-        isSyncing = false
         isDownloading = false
 
     }
     
-    @MainActor
-    private func performFullRefresh(modelContext: ModelContext) async {
+    /// only called manually from Button – or when lastSync is more than 30 days away in `fetchRemoteChanges`
+    ///
+    func performFullRefresh() async {
+        guard let modelContext else {
+            print("⚠️ SupabaseSyncManager: uploadLocalChanges: no ModelContext set!")
+            return
+        }
+
         do {
+            isDownloading = true
+            
             print("🗑️ Deleting all local data...")
             
             try modelContext.delete(model: Autor.self)
             try modelContext.delete(model: Buch.self)
-
             try modelContext.save()
 
+            print("🔄 Resetting sync date before fetching fresh data...")
+            UserDefaults.standard.set(Date.distantPast, forKey: "lastSyncDate") // ✅ Reset sync date
+
             print("🔄 Fetching fresh data from Supabase...")
-            await performIncrementalSync(modelContext: modelContext, lastSyncDate: nil)
+            await performIncrementalSync(lastSyncDate: .distantPast)
 
             print("✅ Full refresh complete!")
+            isDownloading = false
         } catch {
             print("❌ Error during full refresh: \(error)")
+            isDownloading = false
         }
     }
 
-        
     @MainActor
-    private func performIncrementalSync(modelContext: ModelContext, lastSyncDate: Date?) async {
+    private func performIncrementalSync(lastSyncDate: Date) async {
+        guard let modelContext else {
+            print("⚠️ SupabaseSyncManager: uploadLocalChanges: no ModelContext set!")
+            return
+        }
+
         do {
             // Fetch Autoren
             let autorResponse: [AutorRemote] = try await supabase
@@ -169,24 +239,18 @@ final class SupabaseSyncManager {
             // Store Autoren
             for remoteAutor in autorResponse {
                 print("--- download Autor", remoteAutor.name)
-                if remoteAutor.isDeleted {
-                    remoteAutor.deleteAutor(modelContext: modelContext)
-                } else {
-                    remoteAutor.createOrUpdateAutor(modelContext: modelContext)
-                }
+                remoteAutor.createOrUpdateAutor(modelContext: modelContext)
             }
             
             // Store Bücher
             for remoteBuch in buchResponse {
                 print("--- download Buch", remoteBuch.titel)
-                if remoteBuch.isDeleted {
-                    remoteBuch.deleteBuch(modelContext: modelContext)
-                } else {
-                    remoteBuch.createOrUpdateBuch(modelContext: modelContext)
-                }
+                remoteBuch.createOrUpdateBuch(modelContext: modelContext)
             }
             
             try modelContext.save()
+            
+            // only set lastsyncdate when successful
             UserDefaults.standard.set(Date(), forKey: "lastSyncDate")
             
         } catch {
@@ -205,17 +269,17 @@ final class SupabaseSyncManager {
     
     /// start listening to realtime changes in supabase
     /// can only be one channel!
-    func startRealtimeSync(modelContext: ModelContext) {
+    func startRealtimeSync() {
+        
         print("🔄 SupabaseSyncManager: Starting sync ...")
-        self.modelContext = modelContext
 
         Task {
-            await subscribeToChanges(modelContext: modelContext)
+            await subscribeToChanges()
         }
         
         // Initialize the periodic sync timer
         DispatchQueue.main.async { [weak self] in
-            self?.syncTimer = Timer.scheduledTimer(withTimeInterval: self?.syncTimeInterval ?? 300, repeats: true) { [weak self] _ in
+            self?.syncTimer = Timer.scheduledTimer(withTimeInterval: self?.syncTimeInterval ?? 10, repeats: true) { [weak self] _ in
                 Task { @MainActor in
                     guard let self = self else { return } // ✅ Ensure `self` is available
                     if self.isUploading || self.isDownloading { return }
@@ -225,16 +289,11 @@ final class SupabaseSyncManager {
         }
     }
     
-    @MainActor
     private func performBackgroundSync() async {
-        guard let modelContext = modelContext else {
-            print("❌ Error: ModelContext is not set")
-            return
-        }
         do {
             print("⏳ Performing periodic sync...")
-            try await fetchRemoteChanges(modelContext: modelContext)
-            try await uploadLocalChanges(modelContext: modelContext)
+            try await fetchRemoteChanges()
+            try await uploadLocalChanges()
         } catch {
             print("❌ Error during periodic sync: \(error)")
         }
@@ -256,22 +315,22 @@ final class SupabaseSyncManager {
     /// start listening to realtime changes in supabase
     /// can only be one channel!
     /// delivers changes to "handleChange"
-    private func subscribeToChanges(modelContext: ModelContext) async {
+    private func subscribeToChanges() async {
         subscriptionChannel = supabase.channel("realtime")
         let changeStream = subscriptionChannel!.postgresChange(AnyAction.self, schema: "public")
         await subscriptionChannel!.subscribe()
         
         for await change in changeStream {
             
-            if self.isSyncing {
+            if self.isDownloading {
 //                print("<<< SupabaseSyncManager: is syncing ...")
             } else {
                 
                 print("⤵️ SupabaseSyncManager: Change detected", change.rawMessage.payload)
-                self.isSyncing = true
+                self.isDownloading = true
                 Task { @MainActor in
-                    self.handleChange(change: change, modelContext: modelContext)
-                    self.isSyncing = false
+                    defer { self.isDownloading = false } // Ensure reset even if error occurs
+                    self.handleChange(change: change)
                 }
             }
         }
@@ -283,8 +342,13 @@ final class SupabaseSyncManager {
     /// handles all changes: insert, update, delete from Supabase subscription
     /// for all tables
     @MainActor
-    private func handleChange(change: AnyAction, modelContext: ModelContext) {
+    private func handleChange(change: AnyAction) {
         
+        guard let modelContext else {
+            print("⚠️ SupabaseSyncManager: uploadLocalChanges: no ModelContext set!")
+            return
+        }
+
         guard let table = change.rawMessage.payload["data"]?.objectValue?["table"]?.stringValue else {
             print("⚠️ Table name missing in change event:", change.rawMessage.payload)
             return
@@ -299,12 +363,12 @@ final class SupabaseSyncManager {
                     let newAutor = try jsonObject.decode(as: AutorRemote.self)
                     newAutor.createOrUpdateAutor(modelContext: modelContext)
                     print("--- insert Autor", newAutor.name)
-
+                    
                 case "Buch":
                     let newBuch = try jsonObject.decode(as: BuchRemote.self)
                     newBuch.createOrUpdateBuch(modelContext: modelContext)
                     print("--- insert Buch", newBuch.titel)
-
+                    
                 default:
                     print("⚠️ Unknown table: \(table)")
                 }
@@ -317,38 +381,25 @@ final class SupabaseSyncManager {
                 switch table {
                 case "Autor":
                     let updatedAutor = try jsonObject.decode(as: AutorRemote.self)
-                    // Soft Delete
-                    if updatedAutor.isDeleted {
-                        if let autorToDelete = try? modelContext.fetch(FetchDescriptor<Autor>(predicate: #Predicate { $0.id == updatedAutor.id })).first {
-                            print("--- delete Autor", autorToDelete.name)
-                            modelContext.delete(autorToDelete)
-                        }
-                    } else {
-                        updatedAutor.createOrUpdateAutor(modelContext: modelContext)
-                        print("--- update Autor", updatedAutor.name)
-                    }
+                    updatedAutor.createOrUpdateAutor(modelContext: modelContext)
+                    print("--- update Autor", updatedAutor.name)
                     
                 case "Buch":
                     let updatedBuch = try jsonObject.decode(as: BuchRemote.self)
-                    // Soft Delete
-                    if updatedBuch.isDeleted {
-                        if let buchToDelete = try? modelContext.fetch(FetchDescriptor<Buch>(predicate: #Predicate { $0.id == updatedBuch.id })).first {
-                            print("--- delete Buch", buchToDelete.titel)
-                            modelContext.delete(buchToDelete)
-                        }
-                    } else {
-                        updatedBuch.createOrUpdateBuch(modelContext: modelContext)
-                        print("--- update Buch", updatedBuch.titel)
-                    }
+                    updatedBuch.createOrUpdateBuch(modelContext: modelContext)
+                    print("--- update Buch", updatedBuch.titel)
+
                 default:
-                    print("⚠️ Unknown table: \(table)")
-                }
+                print("⚠️ Unknown table: \(table)")
+            }
                 
                 try modelContext.save()
                 
                 
             // actually not used, because we use Soft Delete
             case .delete(let action):
+                print("⚠️ Delete Should never be called")
+                /*
                 guard let idString = action.oldRecord["id"]?.stringValue, let id = UUID(uuidString: idString) else {
                     print("⚠️ Error: Failed to extract UUID from delete action: \(action.oldRecord)")
                     return
@@ -371,6 +422,7 @@ final class SupabaseSyncManager {
                 }
                 
                 try? modelContext.save()
+                 */
             }
         } catch {
             print("⚠️ Error: \(error)")

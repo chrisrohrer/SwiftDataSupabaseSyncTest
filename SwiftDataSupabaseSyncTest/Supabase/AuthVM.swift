@@ -28,7 +28,6 @@ final class AuthVM: ObservableObject {
         userId != nil
     }
     
-    private var modelContext: ModelContext? // ✅ Store model context
     private var didInitializeSync = false
     
     init() {
@@ -37,7 +36,6 @@ final class AuthVM: ObservableObject {
     
     @MainActor
     func setContext(_ context: ModelContext) {
-        self.modelContext = context
         // ✅ Start sync after login
         if self.isAuthenticated {
             self.setupSync()
@@ -53,9 +51,7 @@ final class AuthVM: ObservableObject {
                 if [.initialSession, .signedIn, .signedOut].contains(state.event) {
                     Task { @MainActor in
                         
-                        let role = state.session?.user.role
                         let user = state.session?.user.email
-                        
                         self.userId = state.session?.user.id
                         self.user = state.session?.user.email
                         
@@ -97,16 +93,16 @@ final class AuthVM: ObservableObject {
     
     @MainActor
     private func setupSync() {
-        guard let modelContext, didInitializeSync == false else { return } // ✅ Prevent multiple initializations
+        guard didInitializeSync == false else { return } // ✅ Prevent multiple initializations
         didInitializeSync = true
         
         Task { @MainActor in
             do {
                 print("🔄 Initializing all Syncs...")
-                try await SupabaseSyncManager.shared.fetchRemoteChanges(modelContext: modelContext)
-                try await SupabaseSyncManager.shared.uploadLocalChanges(modelContext: modelContext)
-                SupabaseSyncManager.shared.startRealtimeSync(modelContext: modelContext)
-                SwiftDataSyncManager.shared.startObservingContext(modelContext)
+                try await SupabaseSyncManager.shared.fetchRemoteChanges()
+                try await SupabaseSyncManager.shared.uploadLocalChanges()
+                SupabaseSyncManager.shared.startRealtimeSync()
+                SwiftDataSyncManager.shared.startObservingContext()
                 
             } catch {
                 print("🔄 Error initializing sync: \(error)")

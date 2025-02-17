@@ -12,7 +12,10 @@ struct BuchDetails: View {
     
     @Bindable var buch: Buch
     
-    @Query(sort: \Autor.name)
+    @Environment(\.modelContext) private var modelContext
+
+    @Query(filter: #Predicate<Autor> { $0.softDeleted == false },
+           sort: \Autor.name)
     private var autoren: [Autor]
 
     var body: some View {
@@ -29,6 +32,9 @@ struct BuchDetails: View {
                 }
             }
             Spacer()
+            
+            Button("Save") { try? modelContext.save() }
+
         }
         .navigationTitle(buch.titel)
         .padding()

@@ -13,7 +13,7 @@ import Realtime
 struct ContentView: View {
     
     @Environment(\.modelContext) private var modelContext
-
+    
     var body: some View {
         TabView {
             AutorenView()
@@ -76,7 +76,7 @@ struct ContentView: View {
 //
 //
 //
-#Preview {
-    ContentView()
-        .modelContainer(MyPreviews.shared.container)
-}
+//#Preview {
+//    ContentView()
+//        .modelContainer(MyPreviews.shared.container)
+//}

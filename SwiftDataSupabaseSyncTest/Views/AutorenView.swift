@@ -13,21 +13,19 @@ struct AutorenView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var authVM: AuthVM
 
-    @Query(sort: \Autor.name)
+    @Query(filter: #Predicate<Autor> { $0.softDeleted == false },
+           sort: \Autor.name)
     private var autoren: [Autor]
 
     @State private var showNewSheet = false
-
+    @State private var selectedAuthor: Autor?
+    
     var body: some View {
         NavigationSplitView {
-            List {
+            List(selection: $selectedAuthor) {
                 ForEach(autoren) { autor in
-                    NavigationLink {
-                        AutorDetails(autor: autor)
-                        
-                    } label: {
-                        autorListCell(autor)
-                    }
+                    autorListCell(autor)
+                        .id(autor)
                 }
                 .onDelete(perform: deleteItems)
             }
@@ -36,26 +34,32 @@ struct AutorenView: View {
                 ToolbarItemGroup(placement: .navigation) {
                     Button("Logout") { authVM.signOut() }
                     
-                    Button("Sync", systemImage: "arrow.trianglehead.2.clockwise.rotate.90") {
+                    Button("Full refresh", systemImage: "arrow.trianglehead.2.clockwise.rotate.90") {
+                        UserDefaults.standard.set(Date.now.addingTimeInterval(-60*60*24*45), forKey: "lastSyncDate")
+
                         Task {
-                            try? await SupabaseSyncManager.shared.fetchRemoteChanges(modelContext: modelContext)
-                            try? await SupabaseSyncManager.shared.uploadLocalChanges(modelContext: modelContext)
+                            await SupabaseSyncManager.shared.performFullRefresh()
                         }
                     }
+                    .labelStyle(.titleAndIcon)
                 }
-                
+                ToolbarItem {
+                    Button("Add Item", systemImage: "plus") { showNewSheet = true }
+                }
 #if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
 #endif
-                ToolbarItem {
-                    Button("Add Item", systemImage: "plus") { showNewSheet = true }
-                }
             }
             .navigationTitle("Autoren")
+            
         } detail: {
-            Text("Autor auswählen")
+            if let selectedAuthor {
+                AutorDetails(autor: selectedAuthor)
+            } else {
+                Text("Autor auswählen")
+            }
         }
         .sheet(isPresented: $showNewSheet) {
             NewAutorSheet()
@@ -69,20 +73,30 @@ struct AutorenView: View {
                     .font(.headline)
                 Group {
                     Text(autor.geburtsjahr.formatted(.number.grouping(.never)))
-                    Text(autor.updatedAt.formatted())
-                    Text(autor.isSynced.description)
+                    HStack {
+                        Text(autor.updatedAt.formatted())
+                        Text(autor.isSynced ? "synced" : "UNSYNCED")
+                        Text(autor.softDeleted ? "deleted" : "alive").foregroundStyle(autor.softDeleted ? .red : .primary)
+                    }
                 }
                 .font(.caption)
                 .foregroundStyle(.secondary)
             }
             .badge(autor.buecher?.count ?? 0)
+        
+            .contextMenu {
+                Button("Löschen") {
+                    autor.softDelete(modelContext: modelContext)
+                    print("In Delete", autor.softDeleted)
+                }
+            }
     }
 
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(autoren[index])
+                autoren[index].softDelete(modelContext: modelContext)
             }
         }
     }

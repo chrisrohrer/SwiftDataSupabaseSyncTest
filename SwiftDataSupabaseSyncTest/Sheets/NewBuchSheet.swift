@@ -13,7 +13,8 @@ struct NewBuchSheet: View {
     
     @Environment(\.modelContext) private var modelContext
 
-    @Query(sort: \Autor.name)
+    @Query(filter: #Predicate<Autor> { $0.softDeleted == false },
+           sort: \Autor.name)
     private var autoren: [Autor]
 
     @State private var autor: Autor? = nil

@@ -33,6 +33,8 @@
 		C61EEC8F2D52997D001083AB /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = C61EEC8E2D52997D001083AB /* Realtime */; };
 		C61EEC912D52997D001083AB /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = C61EEC902D52997D001083AB /* Storage */; };
 		C61EEC932D52997D001083AB /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = C61EEC922D52997D001083AB /* Supabase */; };
+		C6413C852D6328D800671B80 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6413C842D6328D800671B80 /* NetworkMonitor.swift */; };
+		C6413C862D6328D800671B80 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6413C842D6328D800671B80 /* NetworkMonitor.swift */; };
 		C6A82BA92D4694E30090BF3E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BA62D4694E30090BF3E /* ContentView.swift */; };
 		C6A82BAA2D4694E30090BF3E /* SwiftDataSupabaseSyncTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BA72D4694E30090BF3E /* SwiftDataSupabaseSyncTestApp.swift */; };
 		C6A82BAB2D4694E30090BF3E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6A82BA32D4694E30090BF3E /* Preview Assets.xcassets */; };
@@ -63,6 +65,7 @@
 		C61EEC5C2D500B23001083AB /* BuchDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuchDetails.swift; sourceTree = "<group>"; };
 		C61EEC602D52685E001083AB /* SwiftDataSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataSyncManager.swift; sourceTree = "<group>"; };
 		C61EEC662D5298CA001083AB /* SwiftDataSupabaseSyncTestMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDataSupabaseSyncTestMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6413C842D6328D800671B80 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		C6A82B922D4694BC0090BF3E /* SwiftDataSupabaseSyncTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDataSupabaseSyncTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6A82BA32D4694E30090BF3E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C6A82BA52D4694E30090BF3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -216,6 +219,7 @@
 				C6A82BD12D46AE8A0090BF3E /* AuthVM.swift */,
 				C6A82BD22D46AE8A0090BF3E /* AuthView.swift */,
 				C61EEC582D4E838A001083AB /* SupabaseSyncManager.swift */,
+				C6413C842D6328D800671B80 /* NetworkMonitor.swift */,
 				C61EEC602D52685E001083AB /* SwiftDataSyncManager.swift */,
 			);
 			path = Supabase;
@@ -351,6 +355,7 @@
 				C61EEC792D5298F9001083AB /* Secrets.swift in Sources */,
 				C61EEC7A2D5298F9001083AB /* Preview.swift in Sources */,
 				C61EEC7B2D5298F9001083AB /* Autor.swift in Sources */,
+				C6413C862D6328D800671B80 /* NetworkMonitor.swift in Sources */,
 				C61EEC7C2D5298F9001083AB /* AuthVM.swift in Sources */,
 				C61EEC7D2D5298F9001083AB /* NewBuchSheet.swift in Sources */,
 				C61EEC7E2D5298F9001083AB /* BuecherView.swift in Sources */,
@@ -375,6 +380,7 @@
 				C61EEC5D2D500B23001083AB /* BuchDetails.swift in Sources */,
 				C6A82BA92D4694E30090BF3E /* ContentView.swift in Sources */,
 				C6A82BB02D4697550090BF3E /* Preview.swift in Sources */,
+				C6413C852D6328D800671B80 /* NetworkMonitor.swift in Sources */,
 				C61EEC592D4E838A001083AB /* SupabaseSyncManager.swift in Sources */,
 				C6A82BD72D46AE8A0090BF3E /* AuthView.swift in Sources */,
 				C6A82BD92D46AE8A0090BF3E /* AuthVM.swift in Sources */,
@@ -410,8 +416,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = de.rohrers.SwiftDataSupabaseSyncTestMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -439,8 +445,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = de.rohrers.SwiftDataSupabaseSyncTestMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;

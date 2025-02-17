@@ -20,6 +20,7 @@ final class Buch {
     @Attribute(.unique) var id: UUID = UUID()
     var updatedAt: Date = Date() // Letzter Sync-Zeitpunkt
     var isSynced: Bool = false // Kennzeichnet, ob die Änderung schon synchronisiert wurde
+    var softDeleted: Bool = false // Soft delete flag
 
     // Attributes
 
@@ -38,12 +39,20 @@ final class Buch {
         self.autor = autor
     }
 
+    func softDelete(modelContext: ModelContext) {
+        self.softDeleted = true
+        self.isSynced = false
+        self.updatedAt = Date()
+        
+        try? modelContext.save()
+    }
+
 }
 
 struct BuchRemote: Codable {
     var id: UUID
     var updatedAt: Date
-    var isDeleted: Bool
+    var softDeleted: Bool
     var titel: String
     var seiten: Int
     
@@ -54,7 +63,7 @@ struct BuchRemote: Codable {
         return .init(
             id: buch.id,
             updatedAt: buch.updatedAt,
-            isDeleted: false,
+            softDeleted: buch.softDeleted,
             titel: buch.titel,
             seiten: buch.seiten,
             autorID: buch.autor?.id
@@ -64,7 +73,7 @@ struct BuchRemote: Codable {
     enum CodingKeys: String, CodingKey {
         case id
         case updatedAt = "updated_at"
-        case isDeleted = "is_deleted"
+        case softDeleted = "is_deleted"
         case titel
         case seiten
         case autorID = "autor_id"
@@ -87,6 +96,7 @@ extension BuchRemote {
             existingBuch.updatedAt = self.updatedAt
             existingBuch.autor = autor
             existingBuch.isSynced = true
+            existingBuch.softDeleted = self.softDeleted
             
         } else {
             if let autor {
@@ -99,11 +109,13 @@ extension BuchRemote {
         }
     }
 
-    func deleteBuch(modelContext: ModelContext) {
-        if let buchToDelete = try? modelContext.fetch(FetchDescriptor<Buch>(predicate: #Predicate { $0.id == self.id })).first {
-            modelContext.delete(buchToDelete)
-        }
-    }
+//    func deleteBuch(modelContext: ModelContext) {
+//        if let buchToDelete = try? modelContext.fetch(FetchDescriptor<Buch>(predicate: #Predicate { $0.id == self.id })).first {
+//            buchToDelete.softDeleted = true
+//            buchToDelete.updatedAt = self.updatedAt
+//            buchToDelete.isSynced = true
+//        }
+//    }
 
 }
 

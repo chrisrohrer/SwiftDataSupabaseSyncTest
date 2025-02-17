@@ -12,7 +12,6 @@ struct AuthView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var isLoading = false
-//    @State private var result: Result<Void, Error>?
 
     @EnvironmentObject var authVM: AuthVM
     @Environment(\.modelContext) private var modelContext
@@ -23,6 +22,9 @@ struct AuthView: View {
                 ContentView()
                     .onAppear {
                         authVM.setContext(modelContext)
+                        SupabaseSyncManager.shared.setContext(modelContext)
+                        SwiftDataSyncManager.shared.setContext(modelContext)
+                        _ = NetworkMonitor.shared
                     }
 
             } else if authVM.isLoading {

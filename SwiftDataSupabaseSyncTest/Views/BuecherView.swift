@@ -13,21 +13,19 @@ struct BuecherView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var authVM: AuthVM
 
-    @Query(sort: \Buch.titel)
+    @Query(filter: #Predicate<Buch> { $0.softDeleted == false },
+           sort: \Buch.titel)
     private var buecher: [Buch]
 
     @State private var showNewSheet = false
+    @State private var selectedBuch: Buch?
 
     var body: some View {
         NavigationSplitView {
-            List {
+            List(selection: $selectedBuch) {
                 ForEach(buecher) { buch in
-                    NavigationLink {
-                        BuchDetails(buch: buch)
-                        
-                    } label: {
-                        buchListCell(buch)
-                    }
+                    buchListCell(buch)
+                        .id(buch)
                 }
                 .onDelete(perform: deleteItems)
             }
@@ -38,23 +36,29 @@ struct BuecherView: View {
                     
                     Button("Sync", systemImage: "arrow.trianglehead.2.clockwise.rotate.90") {
                         Task {
-                            try? await SupabaseSyncManager.shared.fetchRemoteChanges(modelContext: modelContext)
-                            try? await SupabaseSyncManager.shared.uploadLocalChanges(modelContext: modelContext)
+                            try? await SupabaseSyncManager.shared.fetchRemoteChanges()
+                            try? await SupabaseSyncManager.shared.uploadLocalChanges()
                         }
                     }
+                    .labelStyle(.titleAndIcon)
+               }
+                ToolbarItem {
+                    Button("Add Item", systemImage: "plus") { showNewSheet = true }
                 }
 #if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
 #endif
-                ToolbarItem {
-                    Button("Add Item", systemImage: "plus") { showNewSheet = true }
-                }
             }
             .navigationTitle("Bücher")
+            
         } detail: {
-            Text("Autor auswählen")
+            if let selectedBuch {
+                BuchDetails(buch: selectedBuch)
+            } else {
+                Text("Buch auswählen")
+            }
         }
         .sheet(isPresented: $showNewSheet) {
             NewBuchSheet()
@@ -74,6 +78,12 @@ struct BuecherView: View {
                 }
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+                .contextMenu {
+                    Button("Löschen") {
+                        buch.softDelete(modelContext: modelContext)
+                    }
+                }
 
             }
     }

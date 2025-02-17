@@ -12,6 +12,8 @@ struct AutorDetails: View {
     
     @Bindable var autor: Autor
     
+    @Environment(\.modelContext) private var modelContext
+
     var body: some View {
         
         Form {
@@ -31,6 +33,8 @@ struct AutorDetails: View {
                     }
                 }
             }
+            
+            Button("Save") { try? modelContext.save() }
         }
         .navigationTitle(autor.name)
         .padding()
