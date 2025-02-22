@@ -18,14 +18,14 @@ struct AutorenView: View {
     private var autoren: [Autor]
 
     @State private var showNewSheet = false
-    @State private var selectedAuthor: Autor?
+    @State private var selectedAuthor: Autor.ID?
     
     var body: some View {
         NavigationSplitView {
             List(selection: $selectedAuthor) {
                 ForEach(autoren) { autor in
                     autorListCell(autor)
-                        .id(autor)
+//                        .id(autor)
                 }
                 .onDelete(perform: deleteItems)
             }
@@ -55,8 +55,8 @@ struct AutorenView: View {
             .navigationTitle("Autoren")
             
         } detail: {
-            if let selectedAuthor {
-                AutorDetails(autor: selectedAuthor)
+            if let selectedAuthor, let autor = autoren[selectedAuthor] {
+                AutorDetails(autor: autor)
             } else {
                 Text("Autor auswählen")
             }

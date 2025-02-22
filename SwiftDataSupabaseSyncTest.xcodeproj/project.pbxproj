@@ -35,6 +35,8 @@
 		C61EEC932D52997D001083AB /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = C61EEC922D52997D001083AB /* Supabase */; };
 		C6413C852D6328D800671B80 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6413C842D6328D800671B80 /* NetworkMonitor.swift */; };
 		C6413C862D6328D800671B80 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6413C842D6328D800671B80 /* NetworkMonitor.swift */; };
+		C68840D72D6A1347005A1A86 /* Array ID Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = C68840D62D6A1347005A1A86 /* Array ID Index.swift */; };
+		C68840D82D6A1347005A1A86 /* Array ID Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = C68840D62D6A1347005A1A86 /* Array ID Index.swift */; };
 		C6A82BA92D4694E30090BF3E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BA62D4694E30090BF3E /* ContentView.swift */; };
 		C6A82BAA2D4694E30090BF3E /* SwiftDataSupabaseSyncTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A82BA72D4694E30090BF3E /* SwiftDataSupabaseSyncTestApp.swift */; };
 		C6A82BAB2D4694E30090BF3E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6A82BA32D4694E30090BF3E /* Preview Assets.xcassets */; };
@@ -66,6 +68,7 @@
 		C61EEC602D52685E001083AB /* SwiftDataSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataSyncManager.swift; sourceTree = "<group>"; };
 		C61EEC662D5298CA001083AB /* SwiftDataSupabaseSyncTestMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDataSupabaseSyncTestMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6413C842D6328D800671B80 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		C68840D62D6A1347005A1A86 /* Array ID Index.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array ID Index.swift"; sourceTree = "<group>"; };
 		C6A82B922D4694BC0090BF3E /* SwiftDataSupabaseSyncTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDataSupabaseSyncTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6A82BA32D4694E30090BF3E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C6A82BA52D4694E30090BF3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -208,6 +211,7 @@
 			isa = PBXGroup;
 			children = (
 				C6A82BC22D46A8380090BF3E /* NewSheet.swift */,
+				C68840D62D6A1347005A1A86 /* Array ID Index.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -350,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C61EEC762D5298F9001083AB /* NewSheet.swift in Sources */,
+				C68840D72D6A1347005A1A86 /* Array ID Index.swift in Sources */,
 				C61EEC772D5298F9001083AB /* SupabaseSyncManager.swift in Sources */,
 				C61EEC782D5298F9001083AB /* Buch.swift in Sources */,
 				C61EEC792D5298F9001083AB /* Secrets.swift in Sources */,
@@ -375,6 +380,7 @@
 			files = (
 				C6A82BC62D46A8680090BF3E /* NewBuchSheet.swift in Sources */,
 				C6A82BE92D47FFB80090BF3E /* Buch.swift in Sources */,
+				C68840D82D6A1347005A1A86 /* Array ID Index.swift in Sources */,
 				C6A82BC32D46A8380090BF3E /* NewSheet.swift in Sources */,
 				C6A82BAE2D4694FB0090BF3E /* Autor.swift in Sources */,
 				C61EEC5D2D500B23001083AB /* BuchDetails.swift in Sources */,

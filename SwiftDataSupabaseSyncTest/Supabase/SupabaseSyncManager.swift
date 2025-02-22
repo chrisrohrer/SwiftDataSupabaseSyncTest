@@ -167,10 +167,9 @@ final class SupabaseSyncManager {
         print("⤵️ SupabaseSyncManager: fetchRemoteChanges")
         
         let lastSyncDate = UserDefaults.standard.object(forKey: "lastSyncDate") as? Date ?? Date.distantPast
-//        print("****", lastSyncDate)
         let daysSinceLastSync = Calendar.current.dateComponents([.day], from: lastSyncDate, to: Date()).day ?? 100
-//        print("****", daysSinceLastSync)
-        if daysSinceLastSync > 30 {
+
+        if daysSinceLastSync >= 30 {
             print("🔄 User inactive for \(daysSinceLastSync) days. Performing full refresh...")
             await performFullRefresh()
         } else {
@@ -220,17 +219,13 @@ final class SupabaseSyncManager {
         }
 
         do {
+            
+            // **Permanently remove soft deleted local records older than 30 days**
+            let expirationDate = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? Date.distantPast
+
             // Fetch Autoren
             let autorResponse: [AutorRemote] = try await supabase
                 .from("Autor")
-                .select()
-                .gte("updated_at", value: lastSyncDate)
-                .execute()
-                .value
-            
-            // Fetch Bücher
-            let buchResponse: [BuchRemote] = try await supabase
-                .from("Buch")
                 .select()
                 .gte("updated_at", value: lastSyncDate)
                 .execute()
@@ -241,12 +236,28 @@ final class SupabaseSyncManager {
                 print("--- download Autor", remoteAutor.name)
                 remoteAutor.createOrUpdateAutor(modelContext: modelContext)
             }
+
+            // Permanently remove soft deleted local records older than 30 days
+            try modelContext.delete(model: Autor.self, where: #Predicate { $0.softDeleted && $0.updatedAt < expirationDate })
+
+            
+            // Fetch Bücher
+            let buchResponse: [BuchRemote] = try await supabase
+                .from("Buch")
+                .select()
+                .gte("updated_at", value: lastSyncDate)
+                .execute()
+                .value
             
             // Store Bücher
             for remoteBuch in buchResponse {
                 print("--- download Buch", remoteBuch.titel)
                 remoteBuch.createOrUpdateBuch(modelContext: modelContext)
             }
+            
+            // Permanently remove soft deleted local records older than 30 days
+            try modelContext.delete(model: Buch.self, where: #Predicate { $0.softDeleted && $0.updatedAt < expirationDate })
+            
             
             try modelContext.save()
             

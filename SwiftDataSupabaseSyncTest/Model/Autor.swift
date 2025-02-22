@@ -43,6 +43,12 @@ final class Autor {
         self.softDeleted = true
         self.updatedAt = .now
         self.isSynced = false
+        
+        // für jede Relation!
+        for buch in self.buecher ?? [] {
+            buch.softDelete(modelContext: modelContext)
+        }
+        
         do {
             try modelContext.save()
         } catch {
@@ -101,6 +107,7 @@ extension AutorRemote {
             newAutor.id = self.id
             newAutor.updatedAt = self.updatedAt
             newAutor.isSynced = true
+            newAutor.softDeleted = self.softDeleted
             modelContext.insert(newAutor)
         }
     }

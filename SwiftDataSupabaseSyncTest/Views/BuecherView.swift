@@ -18,14 +18,13 @@ struct BuecherView: View {
     private var buecher: [Buch]
 
     @State private var showNewSheet = false
-    @State private var selectedBuch: Buch?
+    @State private var selectedBuch: Buch.ID?
 
     var body: some View {
         NavigationSplitView {
             List(selection: $selectedBuch) {
                 ForEach(buecher) { buch in
                     buchListCell(buch)
-                        .id(buch)
                 }
                 .onDelete(perform: deleteItems)
             }
@@ -54,8 +53,8 @@ struct BuecherView: View {
             .navigationTitle("Bücher")
             
         } detail: {
-            if let selectedBuch {
-                BuchDetails(buch: selectedBuch)
+            if let selectedBuch, let buch = buecher[selectedBuch] {
+                BuchDetails(buch: buch)
             } else {
                 Text("Buch auswählen")
             }

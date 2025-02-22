@@ -31,6 +31,10 @@ struct BuchDetails: View {
                     Text(autor.name).tag(autor as Autor?)
                 }
             }
+            .onChange(of: buch.autor) { 
+                try? modelContext.save()
+            }
+            
             Spacer()
             
             Button("Save") { try? modelContext.save() }

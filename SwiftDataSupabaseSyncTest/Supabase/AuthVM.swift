@@ -68,7 +68,9 @@ final class AuthVM: ObservableObject {
         Task {
             do {
                 _ = try await supabase.auth.signIn(email: email, password: password)
-                self.isLoading = false
+                Task { @MainActor in
+                    self.isLoading = false
+                }
             } catch {
                 print(#function, error.localizedDescription)
             }
